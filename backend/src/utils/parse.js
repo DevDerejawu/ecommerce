@@ -1,0 +1,7 @@
+export default function parse(data){
+  try{
+    return JSON.parse(data);
+  } catch(err){
+    return null;
+  }
+}
