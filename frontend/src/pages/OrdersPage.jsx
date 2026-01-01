@@ -25,7 +25,9 @@ const OrdersPage = () => {
           setMessage(res.data.message);
         }
       } catch (err) {
-        setMessage(err.message || "Unable to load orders.");
+        if(err.response){ setMessage(err.response.data.message)}else{
+          setMessage(err.message || "Unable to load orders.");
+        }
       } finally {
         setLoading(false);
       }
