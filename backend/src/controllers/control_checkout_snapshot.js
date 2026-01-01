@@ -25,8 +25,8 @@ async function handleCheckoutSnapshot(req, res) {
       res.cookie("sessionId", sessionId, {
         maxAge: 1000 * 60 * 60 * 24 * 90, // extend 90 days
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: "lax",
+        secure: true,
+        sameSite: "none",
       });
     }
 
@@ -72,8 +72,8 @@ async function handleGetCheckoutSnapshot(req, res) {
       res.cookie("sessionId", sessionId, {
         maxAge: 1000 * 60 * 60 * 24 * 90, 
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: "lax",
+        secure: true,
+        sameSite: "none",
       });
     }
 
