@@ -2,7 +2,7 @@
 import { useState } from "react";
 import SearchInputModal from "./navbarSubComponents/SearchInputModal";
 import CartIcon from "./navbarSubComponents/CartIcon";
-import MiddleNavbar from "./navbarSubComponents/MiddleNavBar";
+import MiddleNavbar from "./navbarSubComponents/MiddleNavbar";
 import LogoForNavbar from "./navbarSubComponents/LogoForNavbar";
 import ProductsDropdown from "./ProductsDropdown";
 
