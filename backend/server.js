@@ -29,6 +29,7 @@ const sessionStore = new MySQLStore({
   user: process.env?.DB_USER,
   password: process.env?.DB_PASSWORD,
   database: process.env?.DB_NAME,
+  port: 26100
   checkExpirationInterval: 900000, 
   expiration: 1000 * 60 * 60 * 24 * 90, 
 });
