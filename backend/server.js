@@ -101,10 +101,11 @@ app.use("/api/admin", routeAdminDashboard);
 
 export const PORT = process.env?.PORT || 4000;
 
-app.get("/:any*", (req, res) => {
-  res.sendFile(path.join(process.cwd(), "..", "frontend/dist/index.html"));
+app.get(/.*/, (req, res) => {
+  res.sendFile(
+    path.join(process.cwd(), "..", "frontend", "dist", "index.html")
+  );
 });
-
 
 app.listen(PORT, (err) => {
   if (err) {
