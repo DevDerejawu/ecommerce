@@ -1,5 +1,6 @@
 import cors from 'cors';
 import express from "express";
+import path from "path";
 import cookieParser from 'cookie-parser';
 import sessionPgk from "express-session";
 import MySQLStorePgk from "express-mysql-session";
