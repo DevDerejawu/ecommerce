@@ -24,8 +24,8 @@ export const OrderController = {
       res.cookie("sessionId", sessionId, {
         maxAge: 1000 * 60 * 60 * 24 * 90,
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: "lax",
+        secure: true,
+        sameSite: "none",
       });
     }
 
