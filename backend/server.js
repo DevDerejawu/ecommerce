@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import sessionPgk from "express-session";
 import MySQLStorePgk from "express-mysql-session";
 import dotenv from "dotenv";
-
+dotenv.config();
 //route handlers
 import getProductsRoute from "./src/routes/route_products.js";
 import cartRoutes from './src/routes/route_cart.js';
@@ -20,21 +20,21 @@ import routeAdminDashboard from './src/routes/route_admin_dashboard.js'
 
 
 
-dotenv.config();
+
 const app = express();
 const session = sessionPgk.default || sessionPgk;
 const MySQLStore = MySQLStorePgk(session);
 const sessionStore = new MySQLStore({
-  host: process.env?.DB_HOST || "localhost",
-  user: process.env?.DB_USER || "root",
-  password: process.env?.DB_PASSWORD || "root",
-  database: process.env?.DB_NAME || "portfolio_ecommerce_db",
+  host: process.env?.DB_HOST,
+  user: process.env?.DB_USER,
+  password: process.env?.DB_PASSWORD,
+  database: process.env?.DB_NAME,
   checkExpirationInterval: 900000, 
   expiration: 1000 * 60 * 60 * 24 * 90, 
 });
 
 app.use(session({
-  secret: process.env?.SESSION_SECRET || "devDerejawuBaye",
+  secret: process.env?.SESSION_SECRET,
   store: sessionStore,
   resave: false,
   saveUninitialized: false,
@@ -50,7 +50,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: process?.env.FRONT_END_DOMAIN_URL || "http://localhost:5173", 
+    origin: process?.env.FRONT_END_DOMAIN_URL, 
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true, 
   })
