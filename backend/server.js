@@ -62,7 +62,7 @@ app.use(
 app.use(express.static(path.join(process.cwd(), "..", "frontend/dist")));
 
 
-app.use(express.static("/images", path.join(process.cwd(), "images")));
+app.use('/images', express.static(path.join(process.cwd(), 'images')));
 
 //route to get products like featured, new-arrival, top-rated, top-selling and cheap-products.
 app.use("/api/products", getProductsRoute);
