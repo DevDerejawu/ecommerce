@@ -1,6 +1,6 @@
 import { createContext } from "react";
 export const BaseUrlContext = createContext(null);
-const  baseUrl= "http://localhost:4000"
+const  baseUrl= "https://ecommerce-xni1.onrender.com";
 function BaseUrlContextProvider({ children }) {
   return (
     <BaseUrlContext.Provider value={{ baseUrl }}>
