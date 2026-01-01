@@ -14,7 +14,7 @@ export const OrderController = {
           success: false,
           status: 401,
           message:
-            "Session expired at this time. If you logged in before, plese sign in again to resfresh the cookies.",
+            "You don't have active session. If you logged in before, plese sign in again to resfresh the cookies. You can also add a product to refresh huest session.",
           data: null,
           error: null,
         });
