@@ -25,7 +25,8 @@ const AuthPage = () => {
       const { password, name, email } = authData;
       dataAuthInfo = { password, name, email };
     } else {
-      dataAuthInfo = authData;
+      const {password, email} = authData;
+      dataAuthInfo ={password, email};
     }
     if (!isLogin && authData.password !== authData.confirmPassword) {
       setIsConfirmError(true);
