@@ -34,38 +34,45 @@ async function handleManageSigningup(req, res) {
  
 async function handleManageSigningin(req, res) {
   try {
-    console.log("frot end reach sign in");
     const result = await manageSigningin(req.body);
-        console.log(req.body)
-    console.log(result)
 
     if (!result.success) {
       return res.status(result.status).json(result);
     }
 
-    //save user info in session
     req.session.user = {
       id: result.data.userId,
       role: result.data.role,
     };
 
-    req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 90; 
+    req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 90;
 
-    // Merge guest cart login
-    const sessionId = req.cookies.sessionId;
-    await mergeCarts(result.data.userId, sessionId);
+    req.session.save(async (err) => {
+      if (err) {
+        console.error("Session save error:", err);
+        return res.status(500).json({
+          success: false,
+          status: 500,
+          message: "Session save failed",
+          data: null,
+        });
+      }
 
-    return res.status(200).json({
-      success: true,
-      message: result.message,
-      data: {
-        userId: result.data.userId,
-        role: result.data.role,
-      },
+      const sessionId = req.cookies.sessionId;
+      await mergeCarts(result.data.userId, sessionId);
+
+      return res.status(200).json({
+        success: true,
+        message: result.message,
+        data: {
+          userId: result.data.userId,
+          role: result.data.role,
+        },
+      });
     });
 
   } catch (err) {
-     console.error("controller",err);
+    console.error("controller", err);
     return res.status(500).json({
       success: false,
       status: 500,
