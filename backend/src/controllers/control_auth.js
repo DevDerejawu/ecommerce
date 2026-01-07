@@ -59,7 +59,7 @@ async function handleManageSigningin(req, res) {
       }
 
       const sessionId = req.cookies.sessionId;
-      await mergeCarts(result.data.userId, sessionId);
+      await mergeCarts(req.session?.user?.id, sessionId);
 
       return res.status(200).json({
         success: true,
