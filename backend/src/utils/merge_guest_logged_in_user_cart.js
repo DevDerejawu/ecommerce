@@ -5,7 +5,7 @@ async function merge(userId, sessionId){
         UPDATE  cart 
         SET user_id = ?, session_id = null
         WHERE session_id = ? AND user_id IS NULL`, [userId, sessionId]);
-    }
+    
 
     await db.query(`UPDATE checkout_snapshot
       SET user_id =?, session_id = null
@@ -14,6 +14,7 @@ async function merge(userId, sessionId){
       await db.query(`UPDATE orders
       SET user_id =?, session_id = null
       WHERE session_id =? AND user_id IS NULL`, [userId, sessionId]);
+  }
 }
 
 export default merge;
