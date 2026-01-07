@@ -1,4 +1,4 @@
-
+import rightNow from "./src/utils/today.js";
 import db from "./src/config/db.js";
 
 const categoriesData = [
@@ -168,16 +168,16 @@ const generateRandomProducts = async () => {
 
     for (const category of categoriesData) {
       const [categoryResult] = await db.query(
-        `INSERT INTO categories (name) VALUES (?)`,
-        [category.name]
+        `INSERT INTO categories (name, created_at) VALUES (?, ?)`,
+        [category.name, rightNow()]
       );
       const categoryId = categoryResult.insertId;
 
       for (const subName of category.subcategories) {
         
         const [subResult] = await db.query(
-          `INSERT INTO subcategories (name, category_id) VALUES (?, ?)`,
-          [subName, categoryId]
+          `INSERT INTO subcategories (name, category_id, created_at) VALUES (?, ?, ?)`,
+          [subName, categoryId, rightNow()]
         );
         const subcategoryId = subResult.insertId;
 
@@ -194,9 +194,9 @@ const generateRandomProducts = async () => {
               star_count, rating_star, featured, stock, brand,
               discount_percentage, availability_status,
               weight, width, height, depth,
-              return_policy, description, sales
+              return_policy, description, sales, created_at
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `,
             [
               productName,         
@@ -217,7 +217,8 @@ const generateRandomProducts = async () => {
               randomDecimal(50),   
               `${Math.floor(Math.random()* 40 + 10)}-day return policy`,                 
               `Dummy description for ${productName}`, 
-              randomInt(1000),     
+              randomInt(1000), 
+              rightNow()    
             ]
           );
         }
