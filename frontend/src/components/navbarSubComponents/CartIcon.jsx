@@ -1,10 +1,10 @@
 import { ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
-import { CartContext } from "../../contexts/CartContext";
+import { cartContext } from "../../contexts/CartContext";
 import { useContext } from "react";
 
 function CartIcon() {
-  const { cartCount } = useContext(CartContext);
+  const { cartCount } = useContext(cartContext);
   return (
     <Link to="/cart" className="relative">
       {/* Cart Icon */}
