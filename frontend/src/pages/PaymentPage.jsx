@@ -9,7 +9,7 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 
-import { deliveryOptions } from "./CartPage";
+import { deliveryOptions } from "../deliveryOptions";
 import { BaseUrlContext } from "../contexts/BaseUrlContext";
 import { cartContext } from "../contexts/CartContext";
 
