@@ -1,7 +1,7 @@
 import { BaseUrlContext } from "../contexts/BaseUrlContext";
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
-import { CartContext } from "../contexts/CartContext";
+import { cartContext } from "../contexts/CartContext";
 import { Link, useNavigate } from "react-router-dom";
 
 export const deliveryOptions = [
@@ -14,7 +14,7 @@ export const deliveryOptions = [
 function CartPage() {
   const { baseUrl } = useContext(BaseUrlContext);
   const { products, cartCount, message, loading, refreshCart } =
-    useContext(CartContext);
+    useContext(cartContext);
 
   const navigate = useNavigate();
   const [deliveryOption, setDeliveryOption] = useState("");
