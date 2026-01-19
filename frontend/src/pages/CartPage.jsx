@@ -4,17 +4,10 @@ import { useEffect, useState, useContext } from "react";
 import { cartContext } from "../contexts/CartContext";
 import { Link, useNavigate } from "react-router-dom";
 import { UsePopUpMessage } from "../contexts/NotificationContext";
-
-
-export const deliveryOptions = [
-  { price: 20, range: "Within 3 days" },
-  { price: 15, range: "Within 5 days" },
-  { price: 10, range: "Within 7 days" },
-  { price: 0, range: "After 7 days" },
-];
+import { deliveryOptions } from "../deliveryOptions";
 
 function CartPage() {
-   const {showpopUpMessage, Spinner}= UsePopUpMessage();
+  const {showPopUpMessage, Spinner}= UsePopUpMessage();
   const { baseUrl } = useContext(BaseUrlContext);
   const { products, cartCount, message, loading, refreshCart } =
     useContext(cartContext);
@@ -26,6 +19,8 @@ function CartPage() {
   const [taxFeeCents, setTaxFeeCents] = useState(0);
   const [totalCents, setTotalCents] = useState(0);
   const [quantities, setQuantities] = useState({});
+  const [crudLoading, setCrudLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
     refreshCart();
@@ -86,6 +81,7 @@ function CartPage() {
 
   async function deleteSingleItemOfCart(id) {
     try {
+      setDeleteLoading(true);
       const res = await axios.delete(
         `${baseUrl}/api/cart/delete-single-cart-item/${id}`,
         { withCredentials: true }
@@ -93,11 +89,20 @@ function CartPage() {
 
       const data = res.data;
       if (data.success) {
+        showPopUpMessage(data.message);
         refreshCart();
+      }else{
+         showPopUpMessage(data.message, "error");
       }
-      console.log(data.message);
     } catch (err) {
-      console.log(err.message, err);
+      if(err.response){
+        showPopUpMessage(err.response.data.message, "error");
+      }else{
+        showPopUpMessage("Un known error", "error");
+      }
+      
+    }finally{
+      setDeleteLoading(false);
     }
   }
 
@@ -112,9 +117,9 @@ function CartPage() {
       quantity = null;
       productId = null;
       deliveryDate = product;
-      console.log("gdggd", deliveryDate);
     }
     try {
+      setCrudLoading(true);
       const res = await axios.patch(
         `${baseUrl}/api/cart/update-cart`,
         {
@@ -129,21 +134,31 @@ function CartPage() {
       const data = res.data;
 
       if (data.success) {
-        console.log(data.message);
+       showPopUpMessage(data.message);
         refreshCart();
       } else {
-        console.log(data.message);
+       showPopUpMessage(data.message, "error");
       }
     } catch (err) {
-      console.log(err.message);
+      if(err.response){
+        showPopUpMessage(err.response.data.message, "error");
+      }else{
+        showPopUpMessage("Un known error", "error");
+      }
+      
+    }finally{
+      setCrudLoading(false);
     }
   }
 
   if (loading) {
-    return (
-      <p className="text-center text-[18px] text-blue-700 my-7 mx-4">
+    return (<>
+      <p className="flex flex-col justify-center items-center gap-[10px] text-[18px] text-blue-700 my-7 mx-4 min-h-screen">
         Loading...
       </p>
+
+      <Spinner h={50} w={50}/>
+      </>
     );
   }
 
@@ -224,10 +239,10 @@ function CartPage() {
                         </button>
                         <button
                           className="bg-white border py-1 px-2 rounded cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-400 cursor-pointer"
-                          disabled={getQty(product) === product.quantity}
+                          disabled={getQty(product) === product.quantity || crudLoading}
                           onClick={() => saveChangedCart(product, "quantity")}
                         >
-                          Save
+                          {crudLoading? <Spinner/>: "Save"}
                         </button>
                       </div>
                     </div>
@@ -236,7 +251,7 @@ function CartPage() {
                       className="px-4 cursor-pointer py-2 text-sm border border-red-500 text-red-500 rounded hover:bg-red-50"
                       onClick={() => deleteSingleItemOfCart(product.id)}
                     >
-                      Delete
+                      {deleteLoading? <Spinner/>: "Delete"}
                     </button>
                   </div>
                 </div>
@@ -285,7 +300,7 @@ function CartPage() {
           </div>
         </section>
       ) : (
-        <p className="flex justify-center text-red-600 bg-orange-50 items-between p-20 shadow my-6 mx-4 min-h-screen font-bold text-[60px]">
+        <p className="flex justify-center text-red-600 bg-orange-50 items-between p-20 shadow my-6 mx-4 min-h-screen font-bold md:text-[60px]">
           {message}
         </p>
       )}
