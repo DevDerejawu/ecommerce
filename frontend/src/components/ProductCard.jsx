@@ -5,10 +5,10 @@ import axios from "axios";
 import { seQuantitiesContext } from "../contexts/QuantitiesContext";
 import { UsePopUpMessage } from "../contexts/NotificationContext";
 import { BaseUrlContext } from "../contexts/BaseUrlContext";
-import { CartContext } from "../contexts/CartContext";
+import { cartContext } from "../contexts/CartContext";
 function ProductCard({ product }) {
   const {Spinner, showPopUpMessage} = UsePopUpMessage();
-  const { refreshCart } = useContext(CartContext);
+  const { refreshCart } = useContext(cartContext);
   const { baseUrl } = useContext(BaseUrlContext);
   const { getQty, increaseQty, decreaseQty } = useQuantitiesContext();
   const [lodingPosting, setLoadingPosting] = useState(false);
