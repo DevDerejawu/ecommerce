@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { UsePopUpMessage } from "../contexts/NotificationContext";
 import {
   Elements,
   CardElement,
@@ -19,6 +20,7 @@ const stripePromise = loadStripe(
 );
 
 const CheckoutPayment = () => {
+  const {showPopUpMessage, Spinner} = UsePopUpMessage();
   const navigate = useNavigate();
   const { products, refreshCart } = useContext(cartContext);
   useEffect(() => {
@@ -81,6 +83,7 @@ const CheckoutPayment = () => {
     if (result.error) {
       setMessage(result.error.message);
     } else if (result.paymentIntent.status === "succeeded") {
+      showPopUpMessage("Payment successfull.");
       setMessage("Payment successful!");
     }
   };
@@ -131,12 +134,18 @@ const CheckoutPayment = () => {
 
       const { orderId } = res.data.data;
       setOrderMessage(res.data.message);
+      showPopUpMessage(res.data.message);
 
       setTimeout(() => {
         navigate(`/order/${orderId}`);
         refreshCart();
-      }, 3000);
+      }, 4000);
     } catch (err) {
+      if(err.response){
+        showPopUpMessage(err.response.data.message, "error");
+      }else{
+        showPopUpMessage("Unknown error", "error")
+      }
       setOrderMessage(err.message || "Something went wrong");
     } finally {
       setOrderLoading(false);
@@ -169,7 +178,7 @@ const CheckoutPayment = () => {
           className="text-[18px] bg-blue-700 hover:bg-blue-600 w-full rounded mb-5 p-2 cursor-pointer"
           onClick={handleSubmit}
         >
-          {isProcessing ? "Processing..." : "Pay Now"}
+          {isProcessing ? <Spinner/>: "Pay Now"}
         </button>
 
         {message && <p className="text-[19px] text-center mb-4">{message}</p>}
@@ -180,7 +189,8 @@ const CheckoutPayment = () => {
             className="bg-green-600 hover:bg-green-500 disabled:cursor-not-allowed disabled:bg-gray-300 w-full text-white p-2 rounded cursor-pointer"
             disabled={orderLoading}
           >
-            Finish Your Order
+            {orderLoading? <Spinner/>: "Finish Your Order"}
+            
           </button>
         )}
 
