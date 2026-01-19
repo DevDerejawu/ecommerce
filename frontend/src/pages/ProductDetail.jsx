@@ -3,13 +3,17 @@ import axios from "axios";
 import { Star } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 
+
 //contexts
-import { CartContext } from "../contexts/CartContext";
+import { UsePopUpMessage } from "../contexts/NotificationContext";
+import { cartContext } from "../contexts/CartContext";
 import { useQuantitiesContext } from "../contexts/QuantitiesContext";
 import { BaseUrlContext } from "../contexts/BaseUrlContext";
 
+
 const ProductDetail = () => {
-  const { refreshCart } = useContext(CartContext);
+  const {showPopUpMessage, Spinner} = UsePopUpMessage;
+  const { refreshCart, loading } = useContext(cartContext);
   const { getQty, increaseQty, decreaseQty } = useQuantitiesContext();
   const [loadingPosting, setLoadingPosting] = useState(true);
   const [message, setMessage] = useState("");
