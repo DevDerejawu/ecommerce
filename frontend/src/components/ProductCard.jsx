@@ -2,15 +2,17 @@ import { Link } from "react-router-dom";
 import { useContext, useState } from "react";
 import { Star } from "lucide-react";
 import axios from "axios";
-import { useQuantitiesContext } from "../contexts/QuantitiesContext";
+import { seQuantitiesContext } from "../contexts/QuantitiesContext";
+import { UsePopUpMessage } from "../contexts/NotificationContext";
 import { BaseUrlContext } from "../contexts/BaseUrlContext";
 import { CartContext } from "../contexts/CartContext";
 function ProductCard({ product }) {
+  const {Spinner, showPopUpMessage} = UsePopUpMessage();
   const { refreshCart } = useContext(CartContext);
   const { baseUrl } = useContext(BaseUrlContext);
   const { getQty, increaseQty, decreaseQty } = useQuantitiesContext();
-  const [lodingPosting, setLoadingPosting] = useState(true);
-  const [message, setMessage] = useState("");
+  const [lodingPosting, setLoadingPosting] = useState(false);
+
 
   async function handleAddToCart(product) {
     const price = product.price;
@@ -29,16 +31,17 @@ function ProductCard({ product }) {
       );
 
       if (res.data.success) {
-        setMessage("Added to cart.");
+        showPopUpMessage(res.data.message);
       } else {
-        setMessage("Unable to add to cart.");
+        showPopUpMessage(res.data.message, "error");
       }
     } catch (error) {
-      console.error(error);
-      setMessage("Unable to add to cart.");
+    if(error.response){
+    showPopUpMessage(error.response.data.message, "error");
+  }else{
+    showPopUpMessage("Unknown error", "error");
     } finally {
       setLoadingPosting(false);
-      setTimeout(() => setMessage(""), 1000);
     }
   }
 
@@ -74,8 +77,9 @@ function ProductCard({ product }) {
           await handleAddToCart(product);
           refreshCart();
         }}
+        disabled={lodingPosting}
       >
-        Add to Cart
+        {lodingPosting?<Spinner />: "Add to Cart"}
       </button>
 
       {/* Product info */}
