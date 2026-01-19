@@ -3,6 +3,8 @@ import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { cartContext } from "../contexts/CartContext";
 import { Link, useNavigate } from "react-router-dom";
+import { UsePopUpMessage } from "../contexts/NotificationContext";
+
 
 export const deliveryOptions = [
   { price: 20, range: "Within 3 days" },
@@ -12,6 +14,7 @@ export const deliveryOptions = [
 ];
 
 function CartPage() {
+   const {showpopUpMessage, Spinner}= UsePopUpMessage();
   const { baseUrl } = useContext(BaseUrlContext);
   const { products, cartCount, message, loading, refreshCart } =
     useContext(cartContext);
