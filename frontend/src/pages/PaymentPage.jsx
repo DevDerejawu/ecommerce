@@ -11,7 +11,7 @@ import {
 
 import { deliveryOptions } from "./CartPage";
 import { BaseUrlContext } from "../contexts/BaseUrlContext";
-import { CartContext } from "../contexts/CartContext";
+import { cartContext } from "../contexts/CartContext";
 
 // Stripe test key
 const stripePromise = loadStripe(
@@ -20,7 +20,7 @@ const stripePromise = loadStripe(
 
 const CheckoutPayment = () => {
   const navigate = useNavigate();
-  const { products, refreshCart } = useContext(CartContext);
+  const { products, refreshCart } = useContext(cartContext);
   useEffect(() => {
     refreshCart();
   }, []);
