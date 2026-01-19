@@ -40,10 +40,10 @@ function ProductCard({ product }) {
     showPopUpMessage(error.response.data.message, "error");
   }else{
     showPopUpMessage("Unknown error", "error");
-    } finally {
+    } 
+  }finally {
       setLoadingPosting(false);
     }
-  }
 
   return (
     <div className="group relative cursor-pointer border rounded-lg overflow-hidden bg-white pb-3">
