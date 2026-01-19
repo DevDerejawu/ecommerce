@@ -2,7 +2,7 @@ import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { BaseUrlContext } from "./BaseUrlContext"; 
 
-export const CartContext = createContext();
+export const cartContext = createContext();
 export default function CartContextProvider({ children }) {
   const { baseUrl } = useContext(BaseUrlContext);
   const [products, setProducts] = useState([]);
@@ -39,10 +39,10 @@ export default function CartContextProvider({ children }) {
   );
 
   return (
-    <CartContext.Provider
+    <cartContext.Provider
       value={{ products, cartCount, message, loading, refreshCart: fetchCart }}
     >
       {children}
-    </CartContext.Provider>
+    </cartContext.Provider>
   );
 }
