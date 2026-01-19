@@ -1,2 +1,10 @@
 @import "tailwindcss";
 @import "react-responsive-carousel/lib/styles/carousel.min.css";
+@keyframes shrink {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.animate-progress-bar {
+  animation: shrink 3000ms linear forwards;
+}
