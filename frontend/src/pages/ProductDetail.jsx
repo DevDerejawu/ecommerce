@@ -2,21 +2,20 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Star } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
-
+import { UsePopUpMessage } from "../contexts/NotificationContext";
 
 //contexts
-import { UsePopUpMessage } from "../contexts/NotificationContext";
 import { cartContext } from "../contexts/CartContext";
 import { useQuantitiesContext } from "../contexts/QuantitiesContext";
 import { BaseUrlContext } from "../contexts/BaseUrlContext";
 
-
 const ProductDetail = () => {
-  const {showPopUpMessage, Spinner} = UsePopUpMessage;
+  const {showPopUpMessage, Spinner} = UsePopUpMessage();
   const { refreshCart, loading } = useContext(cartContext);
   const { getQty, increaseQty, decreaseQty } = useQuantitiesContext();
-  const [loadingPosting, setLoadingPosting] = useState(true);
-  const [message, setMessage] = useState("");
+  const [loadingPosting, setLoadingPosting] = useState(false);
+  const [firstFetchLoading, setFirstFetchLoading] = useState(false);
+  
 
   async function handleAddToCart(product) {
     const price = product.price;
@@ -35,16 +34,20 @@ const ProductDetail = () => {
       );
 
       if (res.data.success) {
-        setMessage("Added to cart.");
+        showPopUpMessage(res.data.message)
       } else {
-        setMessage("Unable to add to cart.");
+        showPopUpMessage(res.data.message)
       }
     } catch (error) {
+      if(error.response){
+        showPopUpMessage(error.response.data.message);
+      }else{
+        showPopUpMessage("Unknown error");
+      }
       console.error(error);
-      setMessage("Unable to add to cart.");
+      
     } finally {
       setLoadingPosting(false);
-      setTimeout(() => setMessage(""), 1000);
     }
   }
 
@@ -56,29 +59,35 @@ const ProductDetail = () => {
 
     const fetchProduct = async () => {
       try {
-        const res = await axios(`${baseUrl}/api/products/detail/get/${id}`);
+        setFirstFetchLoading(true);
+        const res = await axios(`${baseUrl}/api/products/detail/get/${id}`, { withCredentials: true});
         const data = res.data;
 
         if (data.success) {
           setProduct(data.data);
+          showPopUpMessage(data.message);
         } else {
-          throw new Error(data.message);
+          showPopUpMessage(data.message, "error");
         }
       } catch (err) {
         if (err.response) {
-          setMessage(err.response.data.message);
+          showPopUpMessage(err.response.data.message, "error");
         } else {
-          setMessage("Unknown error");
+          showPopUpMessage("Unknown error", "error");
         }
+      }finally{
+        setFirstFetchLoading(false);
       }
     };
 
     fetchProduct();
   }, [id]);
-
+  if(firstFetchLoading){return(<div className="flex justify-center items-center min-h-screen">
+    <Spinner h={30} w={30}/>
+  </div>)}
   if (!product || product?.length === 0)
     return (
-      <p className="text-center text-red-700 text-[21px] my-5">{message}</p>
+      <p className="flex justify-center items-center min-h-screen text-red-700 text-[21px] my-5">Can't thetch the detailes of the product.</p>
     );
   return (
     <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -187,10 +196,6 @@ const ProductDetail = () => {
           </button>
         </div>
 
-        <p className="text-center text-[18px] text-blue-700">
-          {loadingPosting ? loadingPosting : message}
-        </p>
-
         {/* Add to Cart Button */}
         <button
           className="mt-4 bg-blue-600 cursor-pointer text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition"
@@ -198,8 +203,10 @@ const ProductDetail = () => {
             await handleAddToCart(product);
             refreshCart();
           }}
+          disabled={loadingPosting}
         >
-          Add to Cart
+          {loadingPosting?<Spinner/>: " Add to Cart"}
+         
         </button>
       </div>
     </div>
