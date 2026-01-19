@@ -2,8 +2,10 @@ import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BaseUrlContext } from "../contexts/BaseUrlContext";
+import { UsePopUpMessage } from "../contexts/NotificationContext";
 
 const OrdersPage = () => {
+  const {showPopUpMessage, Spinner} = UsePopUpMessage();
   const { baseUrl } = useContext(BaseUrlContext);
   const navigate = useNavigate();
 
@@ -20,14 +22,18 @@ const OrdersPage = () => {
         });
 
         if (res.data.success) {
+          showPopUpMessage(res.data.message)
           setOrders(res.data?.data);
         } else {
-          setMessage(res.data.message);
+          showPopUpMessage(res.data.message, "error");
         }
       } catch (err) {
-        if(err.response){ setMessage(err.response.data.message)}else{
-          setMessage(err.message || "Unable to load orders.");
+        if(err.response){
+          showPopUpMessage(err.response.data.message, "error")
+        }else{
+          showPopUpMessage("Unknown error", "error");
         }
+        
       } finally {
         setLoading(false);
       }
@@ -37,7 +43,9 @@ const OrdersPage = () => {
   }, [baseUrl]);
 
   if (loading)
-    return <p className="text-center py-10 min-h-screen">Loading...</p>;
+    return <div className="flex xlex-col justify-center items-center gap-[10px]  min-h-screen">Loading...
+    <Spinner h={50} w={50}/>
+    </div>;
   if (!orders.length)
     return (
       <div
