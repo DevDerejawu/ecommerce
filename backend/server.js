@@ -57,7 +57,7 @@ app.use(
     credentials: true, 
   })
 );
-
+app.set('trust proxy', 1);
 
 app.use(express.static(path.join(process.cwd(), "..", "frontend/dist")));
 
