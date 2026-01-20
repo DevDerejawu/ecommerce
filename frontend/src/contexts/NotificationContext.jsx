@@ -23,7 +23,7 @@ export const NotificationProvider = ({ children }) => {
 };
 
 export const UsePopUpMessage = () => useContext(NotificationContext);
-function Spinner (h=10, w=10) {
+function Spinner (h=20, w=20) {
   return(
   <div 
     style={{ height: `${h}px`, width: `${w}px` }}
