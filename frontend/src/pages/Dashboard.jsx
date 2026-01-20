@@ -15,8 +15,9 @@ export default function Dashboard() {
         const res = await axios.get(`${baseUrl}/api/admin/dashboard`, {
           withCredentials: true,
         });
-        if (adminLoading) return;
+
         if (!res.data.success) {
+          navigate("/");
         }
       } catch (err) {
         navigate("/");
@@ -52,7 +53,9 @@ export default function Dashboard() {
 
   async function deleteTheProduct(id) {
     try {
-      const res = await axios.delete(`${baseUrl}/api/products/delete/${id}`);
+      const res = await axios.delete(`${baseUrl}/api/products/delete/${id}`, {
+        withCredentials: true,
+      });
       const data = res.data;
       console.log(data);
     } catch (err) {
