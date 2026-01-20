@@ -25,7 +25,9 @@ export const NotificationProvider = ({ children }) => {
 export const UsePopUpMessage = () => useContext(NotificationContext);
 function Spinner (h=10, w=10) {
   return(
-  <div className={`h-[${h}px] w-[${w}px] animate-spin rounded-full border-2 border-white/30 border-t-white`} />
+  <div 
+    style={{ height: `${h}px`, width: `${w}px` }}
+    className="animate-spin rounded-full border-2 border-white/30 border-t-white" />
 )};
 function PopUpMessages ({ message, type }) {
   const isError = type === 'error';
