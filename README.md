@@ -14,14 +14,6 @@ API Endpoints
 
 Context Providers
 
-Getting Started
-
-Environment Variables
-
-Screenshots
-
-Author
-
 🚀 Tech Stack
 Frontend
 React 18 - UI library
@@ -114,7 +106,7 @@ Product Features
 💰 Discount percentage
 
 🗄️ Database Schema
-Tables (9 total)
+Tables (8 total)
 users - User accounts (id, name, email, password, role)
 
 categories - Product categories (id, name)
@@ -128,8 +120,6 @@ cart - Shopping cart items (product_id, quantity, session_id/user_id)
 orders - Order information (shipping, payment, totals)
 
 order_items - Products within orders (order_id, product_id, quantity, price)
-
-reviews - Product reviews (product_id, user_id, rating, comment)
 
 checkout_snapshot - Temporary checkout data storage
 
@@ -145,10 +135,6 @@ users → cart (one-to-many)
 orders → order_items (one-to-many)
 
 products → order_items (one-to-many)
-
-products → reviews (one-to-many)
-
-users → reviews (one-to-many)
 
 🔌 API Endpoints
 Products (8 endpoints)
@@ -218,6 +204,4 @@ QuantitiesContext - Manages product quantities across components
 
 SubcategoryIdContext - Tracks selected subcategory for filtering
 
-📈 Sales tracking
 
-⏰ New arrival, top selling, featured filters
