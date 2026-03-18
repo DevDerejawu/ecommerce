@@ -1,3 +1,8 @@
+
+Live Demo: https://ecommerce-frontend-fylg.onrender.com/
+
+Source Code: https://github.com/DevDerejawu/ecommerce
+
 🛍️ E-Commerce Full-Stack Portfolio Project
 A complete e-commerce platform built with React, Node.js, Express, and MySQL. Features user authentication, product management, shopping cart, order processing, and Stripe payment integration.
 
